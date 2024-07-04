@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class FileManager 
 {
-    public static List<string>  ReadTextFile(string filePath, bool includeBlankLines = true)
+    public static List<string> ReadTextFile(string filePath, bool includeBlankLines = true)
     {
-        if (!filePath.StartsWith('/'))
-            filePath = FilePaths.root + filePath;
-
+        //if (filePath.StartsWith('/'))
+        filePath = FilePaths.root + filePath;
+        
         List<string> lines = new List<string>();
         try
         {
@@ -23,7 +23,7 @@ public class FileManager
                 }
             }
         }
-        catch(FileNotFoundException ex)
+        catch (FileNotFoundException ex)
         {
             Debug.LogError($"File not found: '{ex.FileName}'");
         }
@@ -33,6 +33,29 @@ public class FileManager
 
     public static List<string> ReadTextAsset(string filePath, bool includeBlankLines = true)
     {
-        return null;
+        TextAsset asset = Resources.Load<TextAsset>(filePath);
+        if (asset == null)
+        {
+            Debug.LogError($"Asset not found: {filePath}");
+            return null;
+        }
+
+        return ReadTextAsset(asset, includeBlankLines);
+    }
+
+    public static List<string> ReadTextAsset(TextAsset asset, bool includeBlankLines = true)
+    {
+        List<string> lines = new List<string>();
+        using (StringReader sr = new StringReader(asset.text)) 
+        {
+            while (sr.Peek() > -1)
+            {
+                string line = sr.ReadLine();
+                if (includeBlankLines || !string.IsNullOrWhiteSpace(line))
+                    lines.Add(line);
+            }
+        }
+
+        return lines;
     }
 }
