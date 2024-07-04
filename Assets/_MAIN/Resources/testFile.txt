@@ -1,0 +1,5 @@
+ItzRigel "Я пришел спасти этот мир" playSong("Epic Song" -v 0.5 -p 0.3)
+
+setScene("EpicScene@ -s 5.5)
+
+narrator "Но я его спасу" playSong("Another Epic Song@ -v 0.5 -p 0.3), list(players), saveGame(1)
